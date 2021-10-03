@@ -1,9 +1,9 @@
 blueprint:
-  name: flashing lights
+  name: Flashing Lights
   description: >
      Flashing lights via on off and delay and finally restore the previous light states.
   domain: automation
-  source_url: https://github.com/myGithub-Markus/home-assistant_blueprints/blob/main/flashing_lights.yaml
+  source_url: https://github.com/stephenwong/home-assistant_blueprints/blob/main/flashing_lights.yaml
   input:
     activated:
         name: Activated
@@ -43,13 +43,6 @@ variables:
 condition: []
 
 action:
-  - service: scene.create
-    data:
-        scene_id: all_lights_snapshot
-        snapshot_entities: >
-               {% set lights = states.light
-                 | map(attribute='entity_id') | join(',') %}
-                 {{lights}}
   - service: light.turn_on
     target: !input target_lights
   - repeat:
@@ -61,6 +54,3 @@ action:
           milliseconds: "{{ delay }}"
       - service: light.toggle
         target: !input target_lights
-  - service: scene.turn_on
-    data:
-      entity_id: scene.all_lights_snapshot
